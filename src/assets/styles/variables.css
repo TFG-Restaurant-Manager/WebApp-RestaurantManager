@@ -1,0 +1,13 @@
+:root {
+  /* Primary */
+  --color-primary: #42b883;
+  --color-primary-dark: #369870;
+  --color-primary-shadow: rgba(66, 184, 131, 0.4);
+
+  /* Neutrals */
+  --color-border: #ccc;
+  --color-border-focus: #42b883;
+  --color-text-on-primary: #ffffff;
+  --color-text: #213547;
+  --color-bg: #f9f9f9;
+}
