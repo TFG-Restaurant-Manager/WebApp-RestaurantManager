@@ -1,18 +1,13 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
 const props = defineProps({
     modelValue: { type: Boolean, default: false },
     label: { type: String, default: '' },
-    name: { type: String, default: '' },
-    size: { type: [String, Number], default: '28px' }
+    name: { type: String, default: '' }
 })
 
 const emit = defineEmits(['update:modelValue', 'change'])
-
-const styleVars = computed(() => ({
-    '--size': typeof props.size === 'number' ? `${props.size}px` : props.size
-}))
 
 const root = ref(null)
 
