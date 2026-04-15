@@ -11,7 +11,7 @@ const props = defineProps({
 const emit = defineEmits(['click'])
 
 function handlePress(e) {
-  const el = e.currentTarget; // el botón
+  const el = e.currentTarget; // el boton
   el.classList.remove('is-pressed');
   void el.offsetWidth;
   el.classList.add('is-pressed');
