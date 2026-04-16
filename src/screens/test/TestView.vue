@@ -6,6 +6,11 @@ import SegmentedButtons from '../../components/SegmentedButtons.vue'
 import SocialButtons from '../../components/SocialButtons.vue'
 import Checkbox from '../../components/Checkbox.vue'
 import BaseInput2 from '@/components/BaseInput2.vue'
+import BaseInput3 from '@/components/BaseInput3.vue'
+import BaseInput4 from '@/components/BaseInput4.vue'
+import LoadingIcon from '@/components/LoadingIcon.vue'
+import Dropdown from '@/components/Dropdown.vue'
+import BaseInput5 from '@/components/BaseInput5.vue'
 
 const inputRef = ref(null)
 const resultado = ref('')
@@ -53,6 +58,15 @@ function handleClick() {
         <Checkbox v-model="agree" label="Recibir novedades" />
       </div>
       <BaseInput2 placeholder="Otro input para comparar estilos..." />
+      <BaseInput3></BaseInput3>
+      <BaseInput4></BaseInput4>
+      <BaseInput5></BaseInput5>
+      <LoadingIcon></LoadingIcon>
+      <div id="dropdown-demo" style="margin-top: 1.25rem;">
+        <Dropdown :options="['Sopa','Pizza','Ensalada']" placeholder="Elige plato..." />
+      </div>
+      
+        <br><br><br><br><br><br><br><br><br><br>
     </div>
 
     <p v-if="resultado">Valor actual: <strong>{{ resultado }}</strong></p>
