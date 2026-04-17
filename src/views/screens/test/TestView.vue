@@ -5,12 +5,12 @@ import BaseInput from '../../components/BaseInput.vue'
 import SegmentedButtons from '../../components/SegmentedButtons.vue'
 import SocialButtons from '../../components/SocialButtons.vue'
 import Checkbox from '../../components/Checkbox.vue'
-import BaseInput2 from '@/components/BaseInput2.vue'
-import BaseInput3 from '@/components/BaseInput3.vue'
-import BaseInput4 from '@/components/BaseInput4.vue'
-import LoadingIcon from '@/components/LoadingIcon.vue'
-import Dropdown from '@/components/Dropdown.vue'
-import BaseInput5 from '@/components/BaseInput5.vue'
+import BaseInput2 from '../../components/BaseInput2.vue'
+import BaseInput3 from '../../components/BaseInput3.vue'
+import BaseInput4 from '../../components/BaseInput4.vue'
+import LoadingIcon from '../../components/LoadingIcon.vue'
+import Dropdown from '../../components/Dropdown.vue'
+import BaseInput5 from '../../components/BaseInput5.vue'
 
 const inputRef = ref(null)
 const resultado = ref('')

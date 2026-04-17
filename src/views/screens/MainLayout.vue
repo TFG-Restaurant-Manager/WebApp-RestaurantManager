@@ -1,25 +1,27 @@
 <script setup>
 import { ref, computed } from 'vue'
-import AppHeader from '../screens/main/AppHeader.vue'
-import AppNavbar from '../screens/main/AppNavbar.vue'
-import TestView from '../screens/test/TestView.vue'
+import AppHeader from './main/AppHeader.vue'
+import AppNavbar from './main/AppNavbar.vue'
+import TestView from './test/TestView.vue'
+import CustomizationTest from './customizationTest/CustomizationTest.vue'
 
 
 const props = defineProps({ config: { type: Object, default: null } })
 
 // ORIGINAL
 const screens = [
-  { id: 'test', label: 'Test', component: TestView },
+  { id: 'test', label: 'Test', component: TestView, props: {} },
+  { id: 'customizationTest', label: 'Customization', component: CustomizationTest, props: { restaurantId: props.config?.id ?? 'default' } },
 ]
 
 const currentId = ref('test')
 const sidebarOpen = ref(false)
 
-const currentComponent = computed(
-  () => screens.find(s => s.id === currentId.value)?.component ?? null
+const currentScreen = computed(
+  () => screens.find(s => s.id === currentId.value) ?? null
 )
-
-//ORIGINAL
+const currentComponent = computed(() => currentScreen.value?.component ?? null)
+const currentProps = computed(() => currentScreen.value?.props ?? {})
 
 
 function hexToRgb(hex) {
@@ -77,20 +79,23 @@ const themeVars = computed(() => {
     />
 
     <main class="main-layout__content">
-      <component :is="currentComponent" />
+      <component :is="currentComponent" v-bind="currentProps" />
     </main>
   </div>
 </template>
 
 <style scoped>
 .main-layout {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .main-layout__content {
   flex: 1;
-  overflow-y: auto;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
 }
 </style>

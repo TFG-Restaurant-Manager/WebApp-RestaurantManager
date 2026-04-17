@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import MainLayout from '../layouts/MainLayout.vue'
+import MainLayout from './screens/MainLayout.vue'
 
 const route = useRoute()
 
