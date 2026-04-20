@@ -1,11 +1,11 @@
 <script setup>
-
+const props = defineProps({ placeholder: { type: String, default: 'Username' } })
 </script>
 
 <template>
     <div class="inputbox">
-        <input required type="text">
-        <span>Username</span>
+        <input required type="text" placeholder="">
+        <span>{{ props.placeholder }}</span>
         <i></i>
     </div>
 </template>

@@ -1,13 +1,14 @@
 <script setup>
 import { ref } from 'vue'
+const props = defineProps({ placeholder: { type: String, default: 'Name' } })
 </script>
 
 <template>
     <div class="group">
-        <input required="" type="text" class="input">
+        <input required type="text" class="input" placeholder="">
         <span class="highlight"></span>
         <span class="bar"></span>
-        <label>Name</label>
+        <label>{{ props.placeholder }}</label>
     </div>
 </template>
 

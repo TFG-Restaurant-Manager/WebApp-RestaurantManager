@@ -1,11 +1,14 @@
 <script setup>
 import { ref } from 'vue'
+const props = defineProps({
+    placeholder: { type: String, default: 'Username' }
+})
 
 </script>
 
 
 <template>
-    <input type="text" autocomplete="off" name="text" class="input" placeholder="Username">
+    <input type="text" autocomplete="off" name="text" class="input" :placeholder="props.placeholder" />
 </template>
 
 <style scoped>

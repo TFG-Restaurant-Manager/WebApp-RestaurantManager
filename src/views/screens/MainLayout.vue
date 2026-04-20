@@ -95,7 +95,10 @@ const themeVars = computed(() => {
 .main-layout__content {
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  /* Permitimos scroll interno en el contenido principal para que se pueda
+     desplazar cuando el editor (canvas) crece verticalmente. Mantener el
+     header fijado y el resto con scroll interno evita afectar el layout global. */
+  overflow: auto;
   position: relative;
 }
 </style>
