@@ -11,6 +11,7 @@ import BaseInput4 from '../../components/BaseInput4.vue'
 import LoadingIcon from '../../components/LoadingIcon.vue'
 import Dropdown from '../../components/Dropdown.vue'
 import BaseInput5 from '../../components/BaseInput5.vue'
+import SegmentedButtonsUnderline from '@/views/components/SegmentedButtonsUnderline.vue'
 
 const inputRef = ref(null)
 const resultado = ref('')
@@ -68,6 +69,8 @@ function handleClick() {
       
         <br><br><br><br><br><br><br><br><br><br>
     </div>
+
+    <SegmentedButtonsUnderline v-model="selected" :options="['Desayuno', 'Comida', 'Cena']" />
 
     <p v-if="resultado">Valor actual: <strong>{{ resultado }}</strong></p>
     <p v-if="selected">Selección actual: <strong>{{ selected }}</strong></p>

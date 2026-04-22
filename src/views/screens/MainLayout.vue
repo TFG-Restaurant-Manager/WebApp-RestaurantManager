@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import AppHeader from './main/AppHeader.vue'
 import AppNavbar from './main/AppNavbar.vue'
 import TestView from './test/TestView.vue'
@@ -7,6 +8,7 @@ import CustomizationTest from './customizationTest/CustomizationTest.vue'
 
 
 const props = defineProps({ config: { type: Object, default: null } })
+const route = useRoute()
 
 // ORIGINAL
 const screens = [
@@ -69,7 +71,8 @@ const themeVars = computed(() => {
 
 <template>
   <div class="main-layout" :style="themeVars">
-    <AppHeader @toggle="sidebarOpen = !sidebarOpen" />
+    <!-- restaurantId viene de config; el slug es el ID del restaurante en la URL -->
+    <AppHeader :restaurant-id="props.config?.id ?? route.params?.slug ?? 'default'" @toggle="sidebarOpen = !sidebarOpen" />
     <AppNavbar
       :screens="screens"
       :current="currentId"
