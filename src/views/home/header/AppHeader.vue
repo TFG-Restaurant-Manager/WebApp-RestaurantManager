@@ -1,45 +1,66 @@
 <script setup>
 import SegmentedButtons from '@/views/components/SegmentedButtons.vue'
-import { ref, onMounted, onUnmounted } from 'vue'
+import ThemeToggle from '@/views/components/ThemeToggle.vue'
+import LangToggle from '@/views/components/LangToggle.vue'
+import BaseButton from '@/views/components/BaseButton.vue'
+import AuthCard from '@/views/components/AuthCard.vue'
+import { useI18n } from 'vue-i18n'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
-/** Opciones de navegación. `label` es el texto visible y `value` el id de la sección destino. */
-const NAV_OPTIONS = [
-  { label: 'Inicio', value: 'inicio' },
-  { label: 'Características', value: 'caracteristicas' },
-  { label: 'Precios', value: 'precios' },
-  { label: 'Contacto', value: 'contacto' },
-]
+const { t } = useI18n()
 
-/** Lookup label → id de sección (para scroll programático). */
-const LABEL_TO_ID = Object.fromEntries(NAV_OPTIONS.map(o => [o.label, o.value]))
+/** IDs fijos de las secciones, independientes del idioma. */
+const SECTION_IDS = ['inicio', 'caracteristicas', 'precios', 'contacto']
 
-/** Lookup id de sección → label (para actualizar el botón activo al hacer scroll). */
-const ID_TO_LABEL = Object.fromEntries(NAV_OPTIONS.map(o => [o.value, o.label]))
+/** Opciones de navegación con labels traducidos. Se recalcula al cambiar idioma. */
+const NAV_OPTIONS = computed(() => [
+  { label: t('nav.inicio'),          value: 'inicio' },
+  { label: t('nav.caracteristicas'), value: 'caracteristicas' },
+  { label: t('nav.precios'),         value: 'precios' },
+  { label: t('nav.contacto'),        value: 'contacto' },
+])
 
-/** Label del botón actualmente activo, sincronizado con la sección visible. */
-const activeSection = ref('Inicio')
+/**
+ * Estado interno del botón activo como ID de sección (locale-independiente).
+ * Se traduce a label bajo demanda para pasarlo a SegmentedButtons.
+ */
+const activeValue = ref('inicio')
+
+/**
+ * Label activo derivado de `activeValue`.
+ * El setter convierte el label emitido por SegmentedButtons de vuelta a value.
+ */
+const activeLabel = computed({
+  get: () => NAV_OPTIONS.value.find(o => o.value === activeValue.value)?.label ?? '',
+  set: (label) => {
+    const opt = NAV_OPTIONS.value.find(o => o.label === label)
+    if (opt) activeValue.value = opt.value
+  },
+})
 
 /** Altura del header en px, usada como offset al calcular la sección visible. */
 const HEADER_HEIGHT = 60
 
 /**
  * Bandera que indica que el scroll fue iniciado por el usuario al pulsar un botón.
- * Mientras está activa, `updateActive` no modifica `activeSection` para evitar parpadeos.
+ * Mientras está activa, `updateActive` no modifica `activeValue` para evitar parpadeos.
  */
 let programmingScroll = false
 
 /** Timer que desactiva `programmingScroll` una vez termina la animación de scroll suave. */
 let scrollEndTimer = null
 
+const showAuthCard = ref(false)
+
 /**
- * Calcula qué sección está actualmente visible y actualiza `activeSection`.
+ * Calcula qué sección está actualmente visible y actualiza `activeValue`.
  * Se ignora si `programmingScroll` está activo (scroll iniciado por clic en nav).
  */
 function updateActive() {
   if (!programmingScroll) {
-    const sections = NAV_OPTIONS.map(({ value }) => ({
-      id: value,
-      el: document.getElementById(value),
+    const sections = SECTION_IDS.map(id => ({
+      id,
+      el: document.getElementById(id),
     })).filter(s => s.el)
 
     const mid = window.scrollY + HEADER_HEIGHT + window.innerHeight * 0.35
@@ -49,8 +70,7 @@ function updateActive() {
       if (el.offsetTop <= mid) current = id
     }
 
-    const label = ID_TO_LABEL[current]
-    if (label && label !== activeSection.value) activeSection.value = label
+    if (current !== activeValue.value) activeValue.value = current
   }
 }
 
@@ -64,16 +84,16 @@ onUnmounted(() => {
  * Maneja el clic en un botón de navegación.
  * Fija el botón activo inmediatamente y desplaza suavemente a la sección correspondiente.
  * Bloquea `updateActive` durante ~900ms para evitar que el scroll intermedio revierta el activo.
- * @param {string} label - Label del botón pulsado.
+ * @param {string} label - Label del botón pulsado (en el idioma actual).
  */
 function onNavChange(label) {
-  const id = LABEL_TO_ID[label]
-  if (id) {
-    activeSection.value = label
+  const opt = NAV_OPTIONS.value.find(o => o.label === label)
+  if (opt) {
+    activeValue.value = opt.value
     programmingScroll = true
     clearTimeout(scrollEndTimer)
 
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    document.getElementById(opt.value)?.scrollIntoView({ behavior: 'smooth' })
 
     scrollEndTimer = setTimeout(() => {
       programmingScroll = false
@@ -90,10 +110,27 @@ function onNavChange(label) {
       <span class="app-header__logo-text">Restaurant<strong>Manager</strong></span>
     </div>
 
-    <!-- Navegación (derecha) -->
-    <nav class="app-header__nav">
-      <SegmentedButtons v-model="activeSection" :options="NAV_OPTIONS" @change="onNavChange" />
-    </nav>
+    <!-- Navegación + toggle de tema (derecha) -->
+    <div class="app-header__right">
+      <nav class="app-header__nav">
+        <SegmentedButtons v-model="activeLabel" :options="NAV_OPTIONS" @change="onNavChange" />
+      </nav>
+      <ThemeToggle />
+      <LangToggle />
+
+      <!-- Login button + dropdown card -->
+      <div class="app-header__auth-wrap">
+        <BaseButton :label="t('nav.login')" @click="showAuthCard = !showAuthCard" />
+        <Transition name="auth-drop">
+          <AuthCard v-if="showAuthCard" class="app-header__auth-card" @close="showAuthCard = false" />
+        </Transition>
+      </div>
+    </div>
+
+    <!-- Backdrop: closes the card when clicking outside -->
+    <Transition name="fade">
+      <div v-if="showAuthCard" class="auth-backdrop" @click="showAuthCard = false" />
+    </Transition>
   </header>
 </template>
 
@@ -128,10 +165,59 @@ function onNavChange(label) {
   font-weight: 800;
 }
 
-/* ── Nav ── */
+/* ── Nav + toggle ── */
+.app-header__right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .app-header__nav {
   display: flex;
   align-items: center;
+}
+
+/* ── Auth wrap + dropdown ── */
+.app-header__auth-wrap {
+  position: relative;
+  flex-shrink: 0;
+  z-index: 200;
+}
+
+.app-header__auth-card {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 10;
+}
+
+/* ── Backdrop ── */
+.auth-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+}
+
+/* ── Transitions ── */
+.auth-drop-enter-active,
+.auth-drop-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s cubic-bezier(.2, .8, .2, 1);
+}
+
+.auth-drop-enter-from,
+.auth-drop-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 /* ── Responsive ── */
@@ -145,6 +231,11 @@ function onNavChange(label) {
   }
 
   .app-header__logo {
+    justify-content: center;
+  }
+
+  .app-header__right {
+    width: 100%;
     justify-content: center;
   }
 

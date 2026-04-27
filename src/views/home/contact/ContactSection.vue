@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const form = ref({ name: '', email: '', message: '' })
 const sent = ref(false)
 
@@ -14,12 +16,9 @@ function submit() {
   <section id="contacto" class="contact">
     <div class="contact__inner">
       <div class="contact__info">
-        <span class="contact__label">Contacto</span>
-        <h2 class="contact__title">¿Tienes alguna pregunta?</h2>
-        <p class="contact__subtitle">
-          Escríbenos y te respondemos en menos de 24 horas.
-          También puedes contactarnos directamente por email.
-        </p>
+        <span class="contact__label">{{ t('contact.label') }}</span>
+        <h2 class="contact__title">{{ t('contact.title') }}</h2>
+        <p class="contact__subtitle">{{ t('contact.subtitle') }}</p>
         <a class="contact__email" href="mailto:hola@restaurantmanager.app">
           hola@restaurantmanager.app
         </a>
@@ -27,52 +26,52 @@ function submit() {
 
       <div class="contact__form-wrap">
         <div v-if="sent" class="contact__sent">
-          <span class="contact__sent-icon">✓</span>
-          <p>Mensaje enviado. Te contestamos pronto.</p>
+          <font-awesome-icon icon="check" class="contact__sent-icon" />
+          <p>{{ t('contact.sent') }}</p>
         </div>
 
         <form v-else class="contact__form" @submit.prevent="submit">
           <div class="contact__field">
-            <label class="contact__field-label" for="c-name">Nombre</label>
+            <label class="contact__field-label" for="c-name">{{ t('contact.fields.name') }}</label>
             <input
               id="c-name"
               v-model="form.name"
               class="contact__input"
               type="text"
-              placeholder="Tu nombre"
+              :placeholder="t('contact.fields.namePlaceholder')"
               required
             />
           </div>
           <div class="contact__field">
-            <label class="contact__field-label" for="c-email">Email</label>
+            <label class="contact__field-label" for="c-email">{{ t('contact.fields.email') }}</label>
             <input
               id="c-email"
               v-model="form.email"
               class="contact__input"
               type="email"
-              placeholder="tu@email.com"
+              :placeholder="t('contact.fields.emailPlaceholder')"
               required
             />
           </div>
           <div class="contact__field">
-            <label class="contact__field-label" for="c-msg">Mensaje</label>
+            <label class="contact__field-label" for="c-msg">{{ t('contact.fields.message') }}</label>
             <textarea
               id="c-msg"
               v-model="form.message"
               class="contact__input contact__textarea"
-              placeholder="Cuéntanos en qué podemos ayudarte"
+              :placeholder="t('contact.fields.messagePlaceholder')"
               rows="5"
               required
             />
           </div>
-          <button type="submit" class="contact__submit">Enviar mensaje</button>
+          <button type="submit" class="contact__submit">{{ t('contact.submit') }}</button>
         </form>
       </div>
     </div>
 
     <!-- Footer mínimo -->
     <div class="contact__footer">
-      <span>© {{ new Date().getFullYear() }} RestaurantManager. Todos los derechos reservados.</span>
+      <span>{{ t('contact.footer', { year: new Date().getFullYear() }) }}</span>
     </div>
   </section>
 </template>

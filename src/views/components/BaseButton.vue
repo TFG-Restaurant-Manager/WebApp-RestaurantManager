@@ -6,15 +6,20 @@ const props = defineProps({
     type: String,
     default: 'Button',
   },
+  variant: {
+    type: String,
+    default: 'primary', // 'primary' | 'outline'
+  },
 })
 
 const emit = defineEmits(['click'])
 
 function handlePress(e) {
-  const el = e.currentTarget; // el boton
-  el.classList.remove('is-pressed');
-  void el.offsetWidth;
-  el.classList.add('is-pressed');
+  const el = e.currentTarget
+  el.classList.remove('is-pressed')
+  void el.offsetWidth
+  el.classList.add('is-pressed')
+  emit('click', e)
 }
 
 function onAnimationEnd(e) {
@@ -25,7 +30,7 @@ function onAnimationEnd(e) {
 
 <template>
   <button
-    class="base-button"
+    :class="['base-button', `base-button--${props.variant}`]"
     type="button"
     @click="handlePress"
     @animationend="onAnimationEnd"
@@ -39,15 +44,11 @@ function onAnimationEnd(e) {
   --btn-scale: 1;
 
   padding: 0.55rem 1.5rem;
-  background-color: var(--color-primary);
-  color: var(--color-text-on-primary);
-  border: none;
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.03em;
   cursor: pointer;
-  box-shadow: 0 4px 12px var(--color-primary-shadow);
   transition:
     background-color 180ms ease,
     transform 450ms cubic-bezier(.2,.8,.2,1),
@@ -57,13 +58,33 @@ function onAnimationEnd(e) {
   transform: scale(var(--btn-scale, 1));
 }
 
-.base-button:hover {
+/* ── Primary ── */
+.base-button--primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  border: none;
+  box-shadow: 0 4px 12px var(--color-primary-shadow);
+}
+
+.base-button--primary:hover {
   background-color: var(--color-primary-dark);
-  /* set the variable for pressed calculations, but also set transform
-     directly so the hover transition animates smoothly */
   --btn-scale: 1.06;
   transform: scale(1.06);
   box-shadow: 0 6px 18px var(--color-primary-shadow);
+}
+
+/* ── Outline ── */
+.base-button--outline {
+  background-color: transparent;
+  color: var(--color-text, #111);
+  border: 1px solid var(--color-border, #e0e0e0);
+  box-shadow: none;
+}
+
+.base-button--outline:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  --btn-scale: 1.03;
+  transform: scale(1.03);
 }
 
 .base-button.is-pressed {

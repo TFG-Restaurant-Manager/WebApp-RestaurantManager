@@ -1,18 +1,20 @@
+<script setup>
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+</script>
+
 <template>
     <section id="inicio" class="main">
         <div class="main__content">
-            <span class="main__badge">Software de gestión para restaurantes</span>
+            <span class="main__badge">{{ t('main.badge') }}</span>
             <h1 class="main__title">
-                Gestiona tu restaurante<br />
-                <span class="main__title--accent">de forma inteligente</span>
+                {{ t('main.title') }}<br />
+                <span class="main__title--accent">{{ t('main.titleAccent') }}</span>
             </h1>
-            <p class="main__subtitle">
-                RestaurantManager centraliza tu menú, pedidos y cocina en una sola plataforma.
-                Diseñada para que tú te enfoques en lo que importa: la experiencia del cliente.
-            </p>
+            <p class="main__subtitle">{{ t('main.subtitle') }}</p>
             <div class="main__actions">
-                <button class="main__cta main__cta--primary">Empieza gratis</button>
-                <button class="main__cta main__cta--secondary">Ver demo →</button>
+                <button class="main__cta main__cta--primary">{{ t('main.ctaPrimary') }}</button>
+                <button class="main__cta main__cta--secondary">{{ t('main.ctaSecondary') }}</button>
             </div>
         </div>
 
@@ -20,32 +22,10 @@
         <div class="main__visual">
             <img
                 src="@/assets/iMockup - iPhone 16 Pro Max.png"
-                alt="RestaurantManager en iPhone"
+                :alt="t('main.mockupAlt')"
                 class="main__phone"
             />
         </div>
-
-        <!-- MOCKUP CSS (desactivado) -->
-        <!--
-        <div class="main__visual">
-            <div class="main__mockup">
-                <div class="main__mockup-bar">
-                    <span class="main__dot" />
-                    <span class="main__dot" />
-                    <span class="main__dot" />
-                </div>
-                <div class="main__mockup-body">
-                    <div class="main__mockup-row main__mockup-row--wide" />
-                    <div class="main__mockup-row main__mockup-row--medium" />
-                    <div class="main__mockup-cards">
-                        <div class="main__mockup-card" v-for="n in 4" :key="n" />
-                    </div>
-                    <div class="main__mockup-row main__mockup-row--short" />
-                    <div class="main__mockup-row main__mockup-row--medium" />
-                </div>
-            </div>
-        </div>
-        -->
     </section>
 </template>
 

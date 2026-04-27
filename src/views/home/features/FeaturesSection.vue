@@ -1,57 +1,58 @@
 <script setup>
-const FEATURES = [
-    {
-        icon: 'utensils',
-        title: 'Gestión de menú',
-        description: 'Crea y organiza platos por categorías, gestiona precios, disponibilidad e ingredientes desde un panel centralizado.',
-    },
-    {
-        icon: 'clipboard-list',
-        title: 'Pedidos en tiempo real',
-        description: 'Los pedidos llegan directamente a cocina. Sin papel, sin intermediarios. Seguimiento de estado en cada pantalla.',
-    },
-    {
-        icon: 'paintbrush',
-        title: 'Editor visual',
-        description: 'Personaliza la disposición de mesas y la carta visual con un editor drag & drop adaptado a tu local.',
-    },
-    {
-        icon: 'clock',
-        title: 'Horarios de empleados',
-        description: 'Organiza los turnos de tu equipo, controla horas trabajadas y gestiona ausencias desde un calendario centralizado.',
-    },
-    {
-        icon: 'chart-bar',
-        title: 'Estadísticas y ventas',
-        description: 'Consulta los platos más vendidos, ingresos por día y rendimiento de tu equipo con informes claros.',
-    },
-    {
-        icon: 'user-shield',
-        title: 'Roles y permisos',
-        description: 'Asigna roles a tu equipo: camarero, cocinero o administrador. Cada rol accede solo a lo que necesita.',
-    },
-]
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 </script>
 
 <template>
     <section id="caracteristicas" class="features">
         <div class="features__header">
-            <span class="features__label">Características</span>
-            <h2 class="features__title">Todo lo que necesitas, nada de lo que no</h2>
-            <p class="features__subtitle">
-                Una herramienta completa pensada desde el primer día para restaurantes reales.
-            </p>
+            <span class="features__label">{{ t('features.label') }}</span>
+            <h2 class="features__title">{{ t('features.title') }}</h2>
+            <p class="features__subtitle">{{ t('features.subtitle') }}</p>
         </div>
 
         <div class="features__grid">
-            <div v-for="feat in FEATURES" :key="feat.title" class="feature-card">
+            <div class="feature-card">
                 <div class="feature-icon-title">
-                    <span class="feature-card__icon">
-                        <font-awesome-icon :icon="feat.icon" />
-                    </span>
-                    <h3 class="feature-card__title">{{ feat.title }}</h3>
+                    <span class="feature-card__icon"><font-awesome-icon icon="utensils" /></span>
+                    <h3 class="feature-card__title">{{ t('features.items.0.title') }}</h3>
                 </div>
-                <p class="feature-card__description">{{ feat.description }}</p>
+                <p class="feature-card__description">{{ t('features.items.0.description') }}</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-title">
+                    <span class="feature-card__icon"><font-awesome-icon icon="clipboard-list" /></span>
+                    <h3 class="feature-card__title">{{ t('features.items.1.title') }}</h3>
+                </div>
+                <p class="feature-card__description">{{ t('features.items.1.description') }}</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-title">
+                    <span class="feature-card__icon"><font-awesome-icon icon="paintbrush" /></span>
+                    <h3 class="feature-card__title">{{ t('features.items.2.title') }}</h3>
+                </div>
+                <p class="feature-card__description">{{ t('features.items.2.description') }}</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-title">
+                    <span class="feature-card__icon"><font-awesome-icon icon="clock" /></span>
+                    <h3 class="feature-card__title">{{ t('features.items.3.title') }}</h3>
+                </div>
+                <p class="feature-card__description">{{ t('features.items.3.description') }}</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-title">
+                    <span class="feature-card__icon"><font-awesome-icon icon="chart-bar" /></span>
+                    <h3 class="feature-card__title">{{ t('features.items.4.title') }}</h3>
+                </div>
+                <p class="feature-card__description">{{ t('features.items.4.description') }}</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-title">
+                    <span class="feature-card__icon"><font-awesome-icon icon="user-shield" /></span>
+                    <h3 class="feature-card__title">{{ t('features.items.5.title') }}</h3>
+                </div>
+                <p class="feature-card__description">{{ t('features.items.5.description') }}</p>
             </div>
         </div>
     </section>

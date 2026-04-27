@@ -1,9 +1,9 @@
 /**
  * Cliente HTTP base que envuelve fetch.
- * La URL base se lee de la variable de entorno VITE_API_URL (definida en .env).
+ * La URL base se lee de la variable de entorno VITE_API_BASE_URL (definida en .env).
  * Todas las peticiones envían/reciben JSON por defecto.
  */
-const BASE_URL = ''
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
 
 /**
  * Realiza una petición HTTP genérica.

@@ -1,85 +1,77 @@
 <script setup>
-const PLANS = [
-  {
-    name: 'Free',
-    price: '0€',
-    period: 'para siempre',
-    description: 'Perfecto para empezar a perder tu tiempo.',
-    features: [
-      '0 restaurantes',
-      'Hasta ningun plato',
-      'Gestión de pedidos nula',
-      'Soporte por email',
-    ],
-    cta: 'Empieza gratis',
-    highlighted: false,
-  },
-  {
-    name: 'Pro',
-    price: '29€',
-    period: 'al mes',
-    description: 'Para restaurantes en crecimiento que necesitan más control y datos.',
-    features: [
-      '1 restaurante',
-      'Platos ilimitados',
-      'Estadísticas y ventas',
-      'Editor visual',
-      'Roles y permisos',
-      'Soporte prioritario',
-    ],
-    cta: 'Empezar con Pro',
-    highlighted: true,
-  },
-  {
-    name: 'Enterprise',
-    price: 'A medida',
-    period: '',
-    description: 'Para grupos de restauración con necesidades específicas.',
-    features: [
-      'Integraciones personalizadas',
-      'SLA garantizado',
-      'Soporte dedicado 24/7',
-      'Onboarding y formación',
-    ],
-    cta: 'Contactar ventas',
-    highlighted: false,
-  },
-]
+import { useI18n } from 'vue-i18n'
+import BaseButton from '@/views/components/BaseButton.vue'
+const { t } = useI18n()
 </script>
 
 <template>
   <section id="precios" class="pricing">
     <div class="pricing__header">
-      <span class="pricing__label">Precios</span>
-      <h2 class="pricing__title">Simple y transparente</h2>
-      <p class="pricing__subtitle">
-        Sin sorpresas. Cancela cuando quieras.
-      </p>
+      <span class="pricing__label">{{ t('pricing.label') }}</span>
+      <h2 class="pricing__title">{{ t('pricing.title') }}</h2>
+      <p class="pricing__subtitle">{{ t('pricing.subtitle') }}</p>
     </div>
 
     <div class="pricing__grid">
-      <div v-for="plan in PLANS" :key="plan.name" class="plan-card"
-        :class="{ 'plan-card--highlighted': plan.highlighted }">
-        <div class="plan-card__top">
-          <span v-if="plan.highlighted" class="plan-card__badge">Más popular</span>
-          <h3 class="plan-card__name">{{ plan.name }}</h3>
-          <div class="plan-card__price-row">
-            <span class="plan-card__price">{{ plan.price }}</span>
-            <span v-if="plan.period" class="plan-card__period">{{ plan.period }}</span>
-          </div>
-          <p class="plan-card__description">{{ plan.description }}</p>
-        </div>
 
+      <!-- Free -->
+      <div class="plan-card">
+        <div class="plan-card__top">
+          <h3 class="plan-card__name">{{ t('pricing.plans.0.name') }}</h3>
+          <div class="plan-card__price-row">
+            <span class="plan-card__price">{{ t('pricing.plans.0.price') }}</span>
+            <span class="plan-card__period">{{ t('pricing.plans.0.period') }}</span>
+          </div>
+          <p class="plan-card__description">{{ t('pricing.plans.0.description') }}</p>
+        </div>
         <ul class="plan-card__features">
-          <li v-for="feat in plan.features" :key="feat" class="plan-card__feature">
-            <font-awesome-icon icon="check" class="plan-card__check" /> {{ feat }}
+          <li v-for="j in 4" :key="j" class="plan-card__feature">
+            <font-awesome-icon icon="check" class="plan-card__check" />
+            {{ t(`pricing.plans.0.features.${j - 1}`) }}
           </li>
         </ul>
-
-        <button class="plan-card__cta" :class="{ 'plan-card__cta--primary': plan.highlighted }">
-          {{ plan.cta }}
-        </button>
+        <BaseButton variant="outline" :label="t('pricing.plans.0.cta')" class="plan-card__cta" />
       </div>
+
+      <!-- Pro -->
+      <div class="plan-card plan-card--highlighted">
+        <div class="plan-card__top">
+          <span class="plan-card__badge">{{ t('pricing.popular') }}</span>
+          <h3 class="plan-card__name">{{ t('pricing.plans.1.name') }}</h3>
+          <div class="plan-card__price-row">
+            <span class="plan-card__price">{{ t('pricing.plans.1.price') }}</span>
+            <span class="plan-card__period">{{ t('pricing.plans.1.period') }}</span>
+          </div>
+          <p class="plan-card__description">{{ t('pricing.plans.1.description') }}</p>
+        </div>
+        <ul class="plan-card__features">
+          <li v-for="j in 6" :key="j" class="plan-card__feature">
+            <font-awesome-icon icon="check" class="plan-card__check" />
+            {{ t(`pricing.plans.1.features.${j - 1}`) }}
+          </li>
+        </ul>
+        <BaseButton variant="primary" :label="t('pricing.plans.1.cta')" class="plan-card__cta" />
+      </div>
+
+      <!-- Enterprise -->
+      <div class="plan-card">
+        <div class="plan-card__top">
+          <h3 class="plan-card__name">{{ t('pricing.plans.2.name') }}</h3>
+          <div class="plan-card__price-row">
+            <span class="plan-card__price">{{ t('pricing.plans.2.price') }}</span>
+            <span v-if="t('pricing.plans.2.period')" class="plan-card__period">{{ t('pricing.plans.2.period') }}</span>
+          </div>
+          <p class="plan-card__description">{{ t('pricing.plans.2.description') }}</p>
+        </div>
+        <ul class="plan-card__features">
+          <li v-for="j in 4" :key="j" class="plan-card__feature">
+            <font-awesome-icon icon="check" class="plan-card__check" />
+            {{ t(`pricing.plans.2.features.${j - 1}`) }}
+          </li>
+        </ul>
+        <BaseButton variant="outline" :label="t('pricing.plans.2.cta')" class="plan-card__cta" />
+      </div>
+
     </div>
   </section>
 </template>
@@ -230,27 +222,10 @@ const PLANS = [
 }
 
 /* ── CTA ── */
-.plan-card__cta {
+.plan-card__cta :deep(.base-button) {
   width: 100%;
   padding: 0.75rem 0;
-  border-radius: 8px;
   font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.15s;
-  border: 1px solid var(--color-border, #e0e0e0);
-  background: transparent;
-  color: var(--color-text, #111);
-}
-
-.plan-card__cta--primary {
-  background: var(--color-primary, #111);
-  color: var(--color-text-on-primary, #fff);
-  border-color: var(--color-primary, #111);
-}
-
-.plan-card__cta:hover {
-  opacity: 0.75;
 }
 
 @media (max-width: 900px) {
