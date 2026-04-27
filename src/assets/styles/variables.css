@@ -1,13 +1,18 @@
+*, *::before, *::after { box-sizing: border-box; }
+body { overflow-x: hidden; }
+
 :root {
   /* Primary */
-  --color-primary: #42b883;
-  --color-primary-dark: #369870;
-  --color-primary-shadow: rgba(66, 184, 131, 0.4);
+  --color-primary: #111111;
+  --color-primary-dark: #000000;
+  --color-primary-shadow: rgba(0, 0, 0, 0.12);
 
   /* Neutrals */
-  --color-border: #ccc;
-  --color-border-focus: #42b883;
+  --color-border: #e0e0e0;
+  --color-border-focus: #111111;
   --color-text-on-primary: #ffffff;
-  --color-text: #213547;
-  --color-bg: #f9f9f9;
+  --color-text: #111111;
+  --color-bg: #ffffff;
+  --color-bg-subtle: #f5f5f5;
+  --color-text-muted: #666666;
 }
