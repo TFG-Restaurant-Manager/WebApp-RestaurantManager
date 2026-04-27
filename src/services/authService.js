@@ -1,4 +1,4 @@
-import { authRepository } from '@/api/authRepository.js'
+import { authRepository } from '@/repository/authRepository.js'
 
 const TOKEN_KEY = 'auth_token'
 

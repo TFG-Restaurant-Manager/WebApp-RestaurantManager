@@ -39,16 +39,19 @@ async function submit() {
   validationError.value = null
   error.value = null
 
-  if (!isLogin.value && form.value.password !== form.value.passwordConfirm) {
+  const passwordsMatch = isLogin.value || form.value.password === form.value.passwordConfirm
+
+  if (!passwordsMatch) {
     validationError.value = t('auth.errorPasswordMismatch')
-    return
   }
 
-  const ok = isLogin.value
-    ? await login({ email: form.value.email, password: form.value.password })
-    : await register({ name: form.value.name, email: form.value.email, password: form.value.password })
+  if (passwordsMatch) {
+    const ok = isLogin.value
+      ? await login({ email: form.value.email, password: form.value.password })
+      : await register({ name: form.value.name, email: form.value.email, password: form.value.password })
 
-  if (ok) emit('close')
+    if (ok) emit('close')
+  }
 }
 </script>
 

@@ -19,9 +19,14 @@ const emit = defineEmits(['update:modelValue', 'change'])
 
 const normalizedOptions = computed(() =>
     props.options.map(rawOption => {
-        if (typeof rawOption === 'string') return { label: rawOption }
-        const { value, ...rest } = rawOption
-        return { ...rest, label: rest.label ?? String(value ?? '') }
+        let result
+        if (typeof rawOption === 'string') {
+            result = { label: rawOption }
+        } else {
+            const { value, ...rest } = rawOption
+            result = { ...rest, label: rest.label ?? String(value ?? '') }
+        }
+        return result
     })
 )
 

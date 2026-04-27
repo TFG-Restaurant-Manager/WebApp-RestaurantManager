@@ -88,8 +88,10 @@ src/
 │       └── en.js                  # Traducciones en inglés
 │
 ├── api/
-│   ├── apiClient.js               # Cliente HTTP base (fetch + VITE_API_BASE_URL)
-│   └── authRepository.js          # Llamadas crudas a /auth/* (login, register, logout, me)
+│   └── apiClient.js                   # Cliente HTTP base (fetch + VITE_API_BASE_URL)
+│
+├── repository/
+│   └── authRepository.js              # Llamadas crudas a /auth/* (login, register, logout, me)
 │
 ├── services/
 │   └── authService.js             # Lógica de negocio de autenticación (token en localStorage)

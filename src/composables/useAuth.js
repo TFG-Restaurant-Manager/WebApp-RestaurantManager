@@ -74,15 +74,16 @@ export function useAuth() {
    * @returns {Promise<void>}
    */
   async function restoreSession() {
-    if (!authService.isAuthenticated()) return
-    loading.value = true
-    error.value = null
-    try {
-      user.value = await authService.fetchCurrentUser()
-    } catch {
-      user.value = null
-    } finally {
-      loading.value = false
+    if (authService.isAuthenticated()) {
+      loading.value = true
+      error.value = null
+      try {
+        user.value = await authService.fetchCurrentUser()
+      } catch {
+        user.value = null
+      } finally {
+        loading.value = false
+      }
     }
   }
 
