@@ -1,7 +1,25 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { ref } from 'vue'
 import BaseButton from '@/views/components/BaseButton.vue'
+import RestaurantRegisterModal from '@/views/components/RestaurantRegisterModal.vue'
+import { restaurantRepository } from '@/repository/restaurantRepository.js'
+
 const { t } = useI18n()
+const showRegister = ref(false)
+const registerError = ref(null)
+const registerSuccess = ref(false)
+
+async function handleRegisterSubmit(payload) {
+  registerError.value = null
+  registerSuccess.value = false
+  try {
+    await restaurantRepository.create(payload)
+    registerSuccess.value = true
+  } catch (err) {
+    registerError.value = err.message
+  }
+}
 </script>
 
 <template>
@@ -50,7 +68,7 @@ const { t } = useI18n()
             {{ t(`pricing.plans.1.features.${j - 1}`) }}
           </li>
         </ul>
-        <BaseButton variant="primary" :label="t('pricing.plans.1.cta')" class="plan-card__cta" />
+        <BaseButton variant="primary" :label="t('pricing.plans.1.cta')" class="plan-card__cta" @click="showRegister = true" />
       </div>
 
       <!-- Enterprise -->
@@ -74,6 +92,14 @@ const { t } = useI18n()
 
     </div>
   </section>
+  <RestaurantRegisterModal :open="showRegister" @close="showRegister = false" @submit="handleRegisterSubmit" />
+
+  <div v-if="registerSuccess" class="register-feedback register-feedback--ok">
+    ✓ Restaurante creado correctamente. Ya puedes iniciar sesión.
+  </div>
+  <div v-if="registerError" class="register-feedback register-feedback--err">
+    Error al crear el restaurante: {{ registerError }}
+diegoluengo.gil1@gmail.com  </div>
 </template>
 
 <style scoped>
@@ -233,4 +259,19 @@ const { t } = useI18n()
     padding: 4rem 2rem;
   }
 }
+
+.register-feedback {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 400;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.register-feedback--ok  { background: #d1fae5; color: #065f46 }
+.register-feedback--err { background: #fee2e2; color: #991b1b }
 </style>

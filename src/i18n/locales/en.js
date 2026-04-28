@@ -104,6 +104,8 @@ export default {
     tabRegister: 'Register',
     fieldName: 'Name',
     fieldNamePlaceholder: 'Your name',
+    fieldCode: 'Employee code',
+    fieldCodePlaceholder: 'e.g. REST001',
     fieldEmail: 'Email',
     fieldEmailPlaceholder: "you{'@'}email.com",
     fieldPassword: 'Password',

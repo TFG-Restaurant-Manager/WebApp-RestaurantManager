@@ -1,6 +1,17 @@
 node_modules/
 dist/
+
+# Variables de entorno — ignorar todos los .env reales
 .env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+
+# .env.example SÍ se sube al repo (es la plantilla pública, sin secretos)
+!.env.example
+
 Dockerfile
 docker-compose.yml
 .dockerignore

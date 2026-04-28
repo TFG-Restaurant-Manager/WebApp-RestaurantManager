@@ -22,35 +22,19 @@ export function useAuth() {
   async function login(credentials) {
     loading.value = true
     error.value = null
+    let success = false
     try {
       user.value = await authService.login(credentials)
-      return true
+      success = true
     } catch (err) {
       error.value = err.message
-      return false
+      success = false
     } finally {
       loading.value = false
     }
+    return success
   }
 
-  /**
-   * Registra un nuevo usuario.
-   * @param {{ name: string, email: string, password: string }} data
-   * @returns {Promise<boolean>} true si el registro fue exitoso
-   */
-  async function register(data) {
-    loading.value = true
-    error.value = null
-    try {
-      user.value = await authService.register(data)
-      return true
-    } catch (err) {
-      error.value = err.message
-      return false
-    } finally {
-      loading.value = false
-    }
-  }
 
   /**
    * Cierra la sesión y limpia el estado.
@@ -87,14 +71,17 @@ export function useAuth() {
     }
   }
 
+  function isAuthenticated() {
+    return user.value !== null
+  }
+
   return {
     user,
     loading,
     error,
     login,
-    register,
     logout,
     restoreSession,
-    isAuthenticated: () => user.value !== null,
+    isAuthenticated,
   }
 }

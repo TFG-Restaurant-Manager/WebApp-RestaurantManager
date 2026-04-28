@@ -12,10 +12,11 @@
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "@fortawesome/vue-fontawesome": "^3.2.0",
+    "@paypal/paypal-js": "^8.0.0",
+    "axios": "^1.15.2",
     "interactjs": "^1.10.27",
     "vue": "^3.5.31",
-    "vue-i18n": "^11.4.0",
-    "vue-router": "^4.6.4"
+    "vue-i18n": "^11.4.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.5",

@@ -1,91 +1,38 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useAuth } from '@/composables/useAuth.js'
 import { useI18n } from 'vue-i18n'
-import SegmentedButtons from '@/views/components/SegmentedButtons.vue'
+// Login-only card (registration removed)
 
 const emit = defineEmits(['close'])
 
-const { login, register, loading, error } = useAuth()
+const { login, loading, error } = useAuth()
 const { t } = useI18n()
 
-const mode = ref('login')
-const form = ref({ name: '', email: '', password: '', passwordConfirm: '' })
-const validationError = ref(null)
-
-const isLogin = computed(() => mode.value === 'login')
-
-const TAB_OPTIONS = computed(() => [
-  { label: t('auth.tabLogin') },
-  { label: t('auth.tabRegister') },
-])
-
-const activeTabLabel = computed({
-  get: () => isLogin.value ? t('auth.tabLogin') : t('auth.tabRegister'),
-  set: (label) => {
-    const newMode = label === t('auth.tabLogin') ? 'login' : 'register'
-    switchMode(newMode)
-  },
-})
-
-function switchMode(newMode) {
-  mode.value = newMode
-  validationError.value = null
-  error.value = null
-  form.value = { name: '', email: '', password: '', passwordConfirm: '' }
-}
+const form = ref({ code: '', password: '' })
 
 async function submit() {
-  validationError.value = null
   error.value = null
-
-  const passwordsMatch = isLogin.value || form.value.password === form.value.passwordConfirm
-
-  if (!passwordsMatch) {
-    validationError.value = t('auth.errorPasswordMismatch')
-  }
-
-  if (passwordsMatch) {
-    const ok = isLogin.value
-      ? await login({ email: form.value.email, password: form.value.password })
-      : await register({ name: form.value.name, email: form.value.email, password: form.value.password })
-
-    if (ok) emit('close')
-  }
+  const ok = await login({ code: form.value.code, password: form.value.password })
+  if (ok) emit('close')
 }
 </script>
 
 <template>
   <div class="auth-card">
 
-    <!-- Tabs -->
-    <SegmentedButtons v-model="activeTabLabel" :options="TAB_OPTIONS" />
-
-    <!-- Form -->
+    <!-- Form (login only) -->
     <form class="auth-card__form" @submit.prevent="submit">
 
-      <div v-if="!isLogin" class="auth-card__field">
-        <label class="auth-card__label" for="ac-name">{{ t('auth.fieldName') }}</label>
+      <div class="auth-card__field">
+        <label class="auth-card__label" for="ac-code">{{ t('auth.fieldCode') }}</label>
         <input
-          id="ac-name"
-          v-model="form.name"
+          id="ac-code"
+          v-model="form.code"
           class="auth-card__input"
           type="text"
-          :placeholder="t('auth.fieldNamePlaceholder')"
-          autocomplete="name"
-          required
-        />
-      </div>
-
-      <div class="auth-card__field">
-        <label class="auth-card__label" for="ac-email">{{ t('auth.fieldEmail') }}</label>
-        <input
-          id="ac-email"
-          v-model="form.email"
-          class="auth-card__input"
-          type="email"
-          :placeholder="t('auth.fieldEmailPlaceholder')"
-          autocomplete="email"
+          :placeholder="t('auth.fieldCodePlaceholder')"
+          autocomplete="username"
           required
         />
       </div>
@@ -98,31 +45,18 @@ async function submit() {
           class="auth-card__input"
           type="password"
           :placeholder="t('auth.fieldPasswordPlaceholder')"
-          :autocomplete="isLogin ? 'current-password' : 'new-password'"
+          autocomplete="current-password"
           required
         />
       </div>
 
-      <div v-if="!isLogin" class="auth-card__field">
-        <label class="auth-card__label" for="ac-password-confirm">{{ t('auth.fieldPasswordConfirm') }}</label>
-        <input
-          id="ac-password-confirm"
-          v-model="form.passwordConfirm"
-          class="auth-card__input"
-          type="password"
-          :placeholder="t('auth.fieldPasswordConfirmPlaceholder')"
-          autocomplete="new-password"
-          required
-        />
-      </div>
-
-      <p v-if="validationError || error" class="auth-card__error">
-        {{ validationError || error }}
+      <p v-if="error" class="auth-card__error">
+        {{ error }}
       </p>
 
       <button type="submit" class="auth-card__submit" :disabled="loading">
         <span v-if="loading" class="auth-card__spinner" />
-        <span v-else>{{ isLogin ? t('auth.submitLogin') : t('auth.submitRegister') }}</span>
+        <span v-else>{{ t('auth.submitLogin') }}</span>
       </button>
 
     </form>
