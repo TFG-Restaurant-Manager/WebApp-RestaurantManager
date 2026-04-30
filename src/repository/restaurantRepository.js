@@ -25,6 +25,6 @@ export const restaurantRepository = {
    * @returns {Promise<{ restaurantId: string, managerId: string }>}
    */
   create(payload) {
-    return apiClient.post('/restaurants', payload)
+    return apiClient.post('/api/restaurant', payload)
   },
 }

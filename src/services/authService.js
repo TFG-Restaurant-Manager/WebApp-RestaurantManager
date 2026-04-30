@@ -15,20 +15,9 @@ export const authService = {
    * @returns {Promise<object>} usuario autenticado
    */
   async login(credentials) {
-    const { token, user } = await authRepository.login(credentials)
-    localStorage.setItem(TOKEN_KEY, token)
-    return user
-  },
-
-  /**
-   * Registra un nuevo usuario, guarda el token y devuelve el usuario.
-   * @param {{ name: string, email: string, password: string }} data
-   * @returns {Promise<object>} usuario creado
-   */
-  async register(data) {
-    const { token, user } = await authRepository.register(data)
-    localStorage.setItem(TOKEN_KEY, token)
-    return user
+    const data = await authRepository.login(credentials)
+    // TODO: persistir token/sesión cuando se conozca la forma exacta de la respuesta
+    return data
   },
 
   /**

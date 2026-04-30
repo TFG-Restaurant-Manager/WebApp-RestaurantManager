@@ -7,21 +7,12 @@ import { apiClient } from '@/api/apiClient.js'
  */
 export const authRepository = {
   /**
-   * Inicia sesión con email y contraseña.
-   * @param {{ email: string, password: string }} credentials
-   * @returns {Promise<{ token: string, user: object }>}
+   * Inicia sesión con código de empleado y contraseña.
+   * @param {{ code: string, password: string }} credentials
+   * @returns {Promise<object>} respuesta del servidor (incluye al menos subscriptionId de PayPal)
    */
   login(credentials) {
-    return apiClient.post('/auth/login', credentials)
-  },
-
-  /**
-   * Registra un nuevo usuario.
-   * @param {{ name: string, email: string, password: string }} data
-   * @returns {Promise<{ token: string, user: object }>}
-   */
-  register(data) {
-    return apiClient.post('/auth/register', data)
+    return apiClient.post('/api/restaurant', credentials)
   },
 
   /**
