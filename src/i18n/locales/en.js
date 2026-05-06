@@ -12,8 +12,8 @@ export default {
     title: 'Manage your restaurant',
     titleAccent: 'the smart way',
     subtitle: 'RestaurantManager centralizes your menu, orders and kitchen in a single platform. Built so you can focus on what matters: the customer experience.',
-    ctaPrimary: 'Get started free',
-    ctaSecondary: 'View demo →',
+    ctaPrimary: 'View plans',
+    ctaSecondary: 'Learn more →',
     mockupAlt: 'RestaurantManager on iPhone',
   },
 
@@ -52,25 +52,12 @@ export default {
   pricing: {
     label: 'Pricing',
     title: 'Simple and transparent',
-    subtitle: 'No surprises. Cancel anytime.',
+    subtitle: 'No surprises. One-time payment, no renewals.',
     plans: [
-      {
-        name: 'Free',
-        price: '$0',
-        period: 'forever',
-        description: 'Perfect for getting started.',
-        features: [
-          '0 restaurants',
-          'Up to no dishes',
-          'No order management',
-          'Email support',
-        ],
-        cta: 'Get started free',
-      },
       {
         name: 'Pro',
         price: '$29',
-        period: 'per month',
+        period: 'one-time payment',
         description: 'For growing restaurants that need more control and data.',
         features: [
           '1 restaurant',

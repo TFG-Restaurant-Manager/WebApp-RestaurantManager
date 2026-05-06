@@ -12,7 +12,7 @@ export const authRepository = {
    * @returns {Promise<object>} respuesta del servidor (incluye al menos subscriptionId de PayPal)
    */
   login(credentials) {
-    return apiClient.post('/api/restaurant', credentials)
+    return apiClient.post('api/restaurant', credentials)
   },
 
   /**
@@ -20,7 +20,7 @@ export const authRepository = {
    * @returns {Promise<void>}
    */
   logout() {
-    return apiClient.post('/auth/logout')
+    return apiClient.post('api/auth/logout')
   },
 
   /**
@@ -28,6 +28,6 @@ export const authRepository = {
    * @returns {Promise<{ user: object }>}
    */
   me() {
-    return apiClient.get('/auth/me')
+    return apiClient.get('api/auth/me')
   },
 }

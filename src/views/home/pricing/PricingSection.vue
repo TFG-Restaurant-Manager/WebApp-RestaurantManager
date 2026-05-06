@@ -3,18 +3,22 @@ import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import BaseButton from '@/views/components/BaseButton.vue'
 import RestaurantRegisterModal from '@/views/components/RestaurantRegisterModal.vue'
-import { restaurantRepository } from '@/repository/restaurantRepository.js'
+import { restaurantService } from '@/services/restaurantService.js'
 
 const { t } = useI18n()
 const showRegister = ref(false)
 const registerError = ref(null)
 const registerSuccess = ref(false)
 
+function scrollToContact() {
+  document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })
+}
+
 async function handleRegisterSubmit(payload) {
   registerError.value = null
   registerSuccess.value = false
   try {
-    await restaurantRepository.create(payload)
+    await restaurantService.create(payload)
     registerSuccess.value = true
   } catch (err) {
     registerError.value = err.message
@@ -32,9 +36,10 @@ async function handleRegisterSubmit(payload) {
 
     <div class="pricing__grid">
 
-      <!-- Free -->
-      <div class="plan-card">
+      <!-- Pro -->
+      <div class="plan-card plan-card--highlighted">
         <div class="plan-card__top">
+          <span class="plan-card__badge">{{ t('pricing.popular') }}</span>
           <h3 class="plan-card__name">{{ t('pricing.plans.0.name') }}</h3>
           <div class="plan-card__price-row">
             <span class="plan-card__price">{{ t('pricing.plans.0.price') }}</span>
@@ -43,51 +48,32 @@ async function handleRegisterSubmit(payload) {
           <p class="plan-card__description">{{ t('pricing.plans.0.description') }}</p>
         </div>
         <ul class="plan-card__features">
-          <li v-for="j in 4" :key="j" class="plan-card__feature">
+          <li v-for="j in 6" :key="j" class="plan-card__feature">
             <font-awesome-icon icon="check" class="plan-card__check" />
             {{ t(`pricing.plans.0.features.${j - 1}`) }}
           </li>
         </ul>
-        <BaseButton variant="outline" :label="t('pricing.plans.0.cta')" class="plan-card__cta" />
-      </div>
-
-      <!-- Pro -->
-      <div class="plan-card plan-card--highlighted">
-        <div class="plan-card__top">
-          <span class="plan-card__badge">{{ t('pricing.popular') }}</span>
-          <h3 class="plan-card__name">{{ t('pricing.plans.1.name') }}</h3>
-          <div class="plan-card__price-row">
-            <span class="plan-card__price">{{ t('pricing.plans.1.price') }}</span>
-            <span class="plan-card__period">{{ t('pricing.plans.1.period') }}</span>
-          </div>
-          <p class="plan-card__description">{{ t('pricing.plans.1.description') }}</p>
-        </div>
-        <ul class="plan-card__features">
-          <li v-for="j in 6" :key="j" class="plan-card__feature">
-            <font-awesome-icon icon="check" class="plan-card__check" />
-            {{ t(`pricing.plans.1.features.${j - 1}`) }}
-          </li>
-        </ul>
-        <BaseButton variant="primary" :label="t('pricing.plans.1.cta')" class="plan-card__cta" @click="showRegister = true" />
+        <BaseButton variant="primary" :label="t('pricing.plans.0.cta')" class="plan-card__cta"
+          @click="showRegister = true" />
       </div>
 
       <!-- Enterprise -->
       <div class="plan-card">
         <div class="plan-card__top">
-          <h3 class="plan-card__name">{{ t('pricing.plans.2.name') }}</h3>
+          <h3 class="plan-card__name">{{ t('pricing.plans.1.name') }}</h3>
           <div class="plan-card__price-row">
-            <span class="plan-card__price">{{ t('pricing.plans.2.price') }}</span>
-            <span v-if="t('pricing.plans.2.period')" class="plan-card__period">{{ t('pricing.plans.2.period') }}</span>
+            <span class="plan-card__price">{{ t('pricing.plans.1.price') }}</span>
+            <span v-if="t('pricing.plans.1.period')" class="plan-card__period">{{ t('pricing.plans.1.period') }}</span>
           </div>
-          <p class="plan-card__description">{{ t('pricing.plans.2.description') }}</p>
+          <p class="plan-card__description">{{ t('pricing.plans.1.description') }}</p>
         </div>
         <ul class="plan-card__features">
           <li v-for="j in 4" :key="j" class="plan-card__feature">
             <font-awesome-icon icon="check" class="plan-card__check" />
-            {{ t(`pricing.plans.2.features.${j - 1}`) }}
+            {{ t(`pricing.plans.1.features.${j - 1}`) }}
           </li>
         </ul>
-        <BaseButton variant="outline" :label="t('pricing.plans.2.cta')" class="plan-card__cta" />
+        <BaseButton variant="outline" :label="t('pricing.plans.1.cta')" class="plan-card__cta" @click="scrollToContact" />
       </div>
 
     </div>
@@ -98,8 +84,7 @@ async function handleRegisterSubmit(payload) {
     ✓ Restaurante creado correctamente. Ya puedes iniciar sesión.
   </div>
   <div v-if="registerError" class="register-feedback register-feedback--err">
-    Error al crear el restaurante: {{ registerError }}
-diegoluengo.gil1@gmail.com  </div>
+    Error al crear el restaurante: {{ registerError }}</div>
 </template>
 
 <style scoped>
@@ -270,8 +255,16 @@ diegoluengo.gil1@gmail.com  </div>
   font-size: 0.9rem;
   font-weight: 600;
   z-index: 400;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
-.register-feedback--ok  { background: #d1fae5; color: #065f46 }
-.register-feedback--err { background: #fee2e2; color: #991b1b }
+
+.register-feedback--ok {
+  background: #d1fae5;
+  color: #065f46
+}
+
+.register-feedback--err {
+  background: #fee2e2;
+  color: #991b1b
+}
 </style>

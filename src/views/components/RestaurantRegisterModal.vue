@@ -69,21 +69,17 @@ function goToPayment() {
   const isValid = validate()
   if (isValid) {
     pendingPayload.value = {
-      restaurant: {
-        prefix: restPrefix.value,
-        name: restName.value,
-        description: restDescription.value,
-        email: restEmail.value,
-        phone: restPhone.value,
-        address: restAddress.value,
-      },
-      employee: {
-        name: managerName.value,
-        email: managerEmail.value,
-        phone: managerPhone.value,
-        code: managerCode.value,
-        password: managerPassword.value,
-      },
+      prefix: restPrefix.value,
+      nameRestaurant: restName.value,
+      description: restDescription.value,
+      emailRestaurant: restEmail.value,
+      phoneRestaurant: restPhone.value,
+      address: restAddress.value,
+      nameEmployee: managerName.value,
+      emailEmployee: managerEmail.value,
+      phoneEmployee: managerPhone.value,
+      code: managerCode.value,
+      password: managerPassword.value,
     }
     step.value = 'payment'
   }
@@ -94,8 +90,6 @@ async function renderPayPalButton() {
   try {
     const paypal = await loadScript({
       clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID ?? 'test',
-      vault: 'true',
-      intent: 'subscription',
       currency: 'EUR',
     })
     await paypal.Buttons({
@@ -103,15 +97,14 @@ async function renderPayPalButton() {
         shape: 'rect',
         color: 'silver',
         layout: 'vertical',
-        label: 'subscribe',
       },
-      createSubscription(data, actions) {
-        return actions.subscription.create({
-          plan_id: import.meta.env.VITE_PAYPAL_PLAN_ID,
+      createOrder(data, actions) {
+        return actions.order.create({
+          purchase_units: [{ amount: { value: '29.00', currency_code: 'EUR' } }],
         })
       },
-      onApprove(data) {
-        emit('submit', { ...pendingPayload.value, subscriptionId: data.subscriptionID })
+      onApprove(data, actions) {
+        emit('submit', pendingPayload.value)
         emit('close')
         reset()
       },
@@ -235,7 +228,7 @@ watch(() => props.open, (v) => {
 
         <!-- Paso 2: pago con PayPal -->
         <div v-if="step === 'payment'" class="payment-step">
-          <p class="payment-summary">Plan <strong>Pro · 29€/mes</strong></p>
+          <p class="payment-summary">Plan <strong>Pro · 29€</strong></p>
           <div id="paypal-button-container" class="paypal-container" />
           <p v-if="paypalError" class="field-error payment-error">{{ paypalError }}</p>
           <div class="register-actions">

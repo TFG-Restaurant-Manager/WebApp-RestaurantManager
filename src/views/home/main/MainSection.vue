@@ -1,6 +1,14 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
+
+function scrollToPlans() {
+  document.getElementById('precios')?.scrollIntoView({ behavior: 'smooth' })
+}
+
+function scrollToFeatures() {
+  document.getElementById('caracteristicas')?.scrollIntoView({ behavior: 'smooth' })
+}
 </script>
 
 <template>
@@ -13,8 +21,8 @@ const { t } = useI18n()
             </h1>
             <p class="main__subtitle">{{ t('main.subtitle') }}</p>
             <div class="main__actions">
-                <button class="main__cta main__cta--primary">{{ t('main.ctaPrimary') }}</button>
-                <button class="main__cta main__cta--secondary">{{ t('main.ctaSecondary') }}</button>
+                <button class="main__cta main__cta--primary" @click="scrollToPlans">{{ t('main.ctaPrimary') }}</button>
+                <button class="main__cta main__cta--secondary" @click="scrollToFeatures">{{ t('main.ctaSecondary') }}</button>
             </div>
         </div>
 
