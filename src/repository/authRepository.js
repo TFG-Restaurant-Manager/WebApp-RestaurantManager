@@ -12,22 +12,8 @@ export const authRepository = {
    * @returns {Promise<object>} respuesta del servidor (incluye al menos subscriptionId de PayPal)
    */
   login(credentials) {
-    return apiClient.post('api/restaurant', credentials)
+    return apiClient.post('employeelogin', credentials)
   },
 
-  /**
-   * Cierra la sesión del usuario actual.
-   * @returns {Promise<void>}
-   */
-  logout() {
-    return apiClient.post('api/auth/logout')
-  },
 
-  /**
-   * Devuelve el usuario autenticado actualmente (valida el token).
-   * @returns {Promise<{ user: object }>}
-   */
-  me() {
-    return apiClient.get('api/auth/me')
-  },
 }

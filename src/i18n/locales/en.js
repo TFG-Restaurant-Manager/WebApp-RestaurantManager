@@ -5,6 +5,8 @@ export default {
     precios: 'Pricing',
     contacto: 'Contact',
     login: 'Log in',
+    logout: 'Log out',
+    unsubscribe: 'Delete data and unsubscribe',
   },
 
   main: {

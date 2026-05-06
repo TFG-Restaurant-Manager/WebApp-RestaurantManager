@@ -4,8 +4,10 @@ import { ref } from 'vue'
 import BaseButton from '@/views/components/BaseButton.vue'
 import RestaurantRegisterModal from '@/views/components/RestaurantRegisterModal.vue'
 import { restaurantService } from '@/services/restaurantService.js'
+import { useAuth } from '@/composables/useAuth.js'
 
 const { t } = useI18n()
+const { setUser } = useAuth()
 const showRegister = ref(false)
 const registerError = ref(null)
 const registerSuccess = ref(false)
@@ -18,7 +20,8 @@ async function handleRegisterSubmit(payload) {
   registerError.value = null
   registerSuccess.value = false
   try {
-    await restaurantService.create(payload)
+    const data = await restaurantService.create(payload)
+    setUser(data)
     registerSuccess.value = true
   } catch (err) {
     registerError.value = err.message

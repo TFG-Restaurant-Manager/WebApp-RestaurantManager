@@ -20,6 +20,10 @@ export const restaurantRepository = {
    * @returns {Promise<{ restaurantId: string, managerId: string }>}
    */
   create(payload) {
-    return apiClient.post('api/restaurant', payload)
+    return apiClient.post('restaurant', payload)
+  },
+
+  remove() {
+    return apiClient.delete('restaurant')
   },
 }

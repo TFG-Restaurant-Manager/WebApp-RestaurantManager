@@ -6,8 +6,16 @@ import BaseButton from '@/views/components/BaseButton.vue'
 import AuthCard from '@/views/components/AuthCard.vue'
 import { useI18n } from 'vue-i18n'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useAuth } from '@/composables/useAuth.js'
+import { restaurantService } from '@/services/restaurantService.js'
 
 const { t } = useI18n()
+const { user, logout } = useAuth()
+
+async function unsubscribe() {
+  await restaurantService.remove()
+  logout()
+}
 
 /** IDs fijos de las secciones, independientes del idioma. */
 const SECTION_IDS = ['inicio', 'caracteristicas', 'precios', 'contacto']
@@ -120,10 +128,16 @@ function onNavChange(label) {
 
       <!-- Login button + dropdown card -->
       <div class="app-header__auth-wrap">
-        <BaseButton :label="t('nav.login')" @click="showAuthCard = !showAuthCard" />
-        <Transition name="auth-drop">
-          <AuthCard v-if="showAuthCard" class="app-header__auth-card" @close="showAuthCard = false" />
-        </Transition>
+        <template v-if="user">
+          <BaseButton :label="t('nav.unsubscribe')" @click="unsubscribe" />
+          <BaseButton :label="t('nav.logout')" @click="logout" />
+        </template>
+        <template v-else>
+          <BaseButton :label="t('nav.login')" @click="showAuthCard = !showAuthCard" />
+          <Transition name="auth-drop">
+            <AuthCard v-if="showAuthCard" class="app-header__auth-card" @close="showAuthCard = false" />
+          </Transition>
+        </template>
       </div>
     </div>
 

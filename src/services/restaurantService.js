@@ -26,4 +26,8 @@ export const restaurantService = {
   async create(payload) {
     return restaurantRepository.create(payload)
   },
+
+  async remove() {
+    return restaurantRepository.remove()
+  },
 }
