@@ -26,7 +26,6 @@ function scrollToFeatures() {
             </div>
         </div>
 
-        <!-- Mockup visual SUSTITUIR POR IMAGEN DE LA APP -->
         <div class="main__visual">
             <img
                 src="@/assets/iMockup - iPhone 16 Pro Max.png"

@@ -7,7 +7,10 @@ const form = ref({ name: '', email: '', message: '' })
 const sent = ref(false)
 
 function submit() {
-  // TODO: conectar con backend o servicio de email
+  const to = 'hola@restaurantmanager.app'
+  const subject = encodeURIComponent(`Contacto de ${form.value.name} <${form.value.email}>`)
+  const body = encodeURIComponent(form.value.message)
+  window.location.href = `mailto:${to}?subject=${subject}&body=${body}`
   sent.value = true
 }
 </script>
@@ -220,5 +223,10 @@ function submit() {
 @media (max-width: 900px) {
   .contact { padding: 4rem 2rem 2rem; }
   .contact__inner { flex-direction: column; gap: 2.5rem; }
+}
+
+@media (max-width: 640px) {
+  .contact { padding: 3rem 1rem 2rem; }
+  .contact__submit { width: 100%; }
 }
 </style>

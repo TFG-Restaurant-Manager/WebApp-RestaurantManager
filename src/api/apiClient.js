@@ -4,6 +4,7 @@
  * La URL base se lee de la variable de entorno VITE_API_BASE_URL.
  */
 import axios from 'axios'
+import { useAuth } from '@/composables/useAuth.js'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
 
@@ -13,6 +14,16 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+})
+
+// Inyectar JWT en cada petición si hay sesión activa.
+instance.interceptors.request.use((config) => {
+  const { token } = useAuth()
+  if (token.value) {
+    config.headers = config.headers ?? {}
+    config.headers['Authorization'] = `Bearer ${token.value}`
+  }
+  return config
 })
 
 // Normalizar respuestas y errores para que coincidan con la implementación previa.

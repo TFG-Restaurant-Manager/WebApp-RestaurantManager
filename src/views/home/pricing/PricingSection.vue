@@ -8,14 +8,28 @@ import { useAuth } from '@/composables/useAuth.js'
 
 const { t } = useI18n()
 const { setUser } = useAuth()
+
+/** Controla la visibilidad del modal de registro de restaurante. */
 const showRegister = ref(false)
+
+/** Mensaje de error devuelto por la API al crear el restaurante, o `null` si no hay error. */
 const registerError = ref(null)
+
+/** `true` cuando el restaurante se ha creado correctamente. */
 const registerSuccess = ref(false)
 
+/** Desplaza la vista suavemente hasta la sección de contacto. */
 function scrollToContact() {
   document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })
 }
 
+/**
+ * Maneja el evento `submit` del modal de registro.
+ * Llama al servicio para crear el restaurante y, si tiene éxito,
+ * inicia sesión automáticamente con los datos devueltos por la API.
+ * @param {object} payload - Datos del formulario de registro (restaurante + empleado admin).
+ * @returns {Promise<void>}
+ */
 async function handleRegisterSubmit(payload) {
   registerError.value = null
   registerSuccess.value = false
@@ -210,7 +224,6 @@ async function handleRegisterSubmit(payload) {
   line-height: 1.5;
 }
 
-/* ── Features ── */
 .plan-card__features {
   list-style: none;
   padding: 0;
@@ -235,7 +248,6 @@ async function handleRegisterSubmit(payload) {
   flex-shrink: 0;
 }
 
-/* ── CTA ── */
 .plan-card__cta :deep(.base-button) {
   width: 100%;
   padding: 0.75rem 0;
@@ -245,6 +257,23 @@ async function handleRegisterSubmit(payload) {
 @media (max-width: 900px) {
   .pricing {
     padding: 4rem 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .pricing {
+    padding: 3rem 1rem;
+  }
+
+  .plan-card {
+    min-width: unset;
+    max-width: unset;
+    width: 100%;
+    flex: unset;
+  }
+
+  .pricing__grid {
+    flex-direction: column;
   }
 }
 

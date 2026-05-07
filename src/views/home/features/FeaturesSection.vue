@@ -161,4 +161,14 @@ const { t } = useI18n()
         padding: 4rem 2rem;
     }
 }
+
+@media (max-width: 480px) {
+    .features {
+        padding: 3rem 1rem;
+    }
+
+    .features__grid {
+        grid-template-columns: 1fr;
+    }
+}
 </style>
