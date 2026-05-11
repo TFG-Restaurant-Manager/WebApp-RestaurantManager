@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import i18n from './i18n/index.js'
+import { useAuth } from './composables/useAuth.js'
 import './assets/styles/variables.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -13,6 +14,7 @@ import {
   faChartBar,
   faUserShield,
   faCheck,
+  faUserCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -23,6 +25,7 @@ library.add(
   faChartBar,
   faUserShield,
   faCheck,
+  faUserCircle,
 )
 
 createApp(App)

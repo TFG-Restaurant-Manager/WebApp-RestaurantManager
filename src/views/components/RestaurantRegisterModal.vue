@@ -3,28 +3,65 @@ import { ref, watch, nextTick } from 'vue'
 import { loadScript } from '@paypal/paypal-js'
 
 const props = defineProps({
+  /** Controla si el modal está visible. */
   open: { type: Boolean, default: false },
 })
-const emit = defineEmits(['close', 'submit'])
 
+const emit = defineEmits([
+  /** Emitido al cerrar el modal (cruz, cancelar o tras completar el pago). */
+  'close',
+  /**
+   * Emitido cuando el pago de PayPal es aprobado.
+   * @param {object} payload - Datos del formulario listos para enviar al backend.
+   */
+  'submit',
+])
+
+// ── Campos del restaurante ──
+/** Prefijo identificador del restaurante (máx. 5 caracteres). */
 const restPrefix = ref('')
+/** Nombre del restaurante. */
 const restName = ref('')
+/** Descripción del restaurante. */
 const restDescription = ref('')
+/** Email de contacto del restaurante. */
 const restEmail = ref('')
+/** Teléfono del restaurante. */
 const restPhone = ref('')
+/** Dirección del restaurante. */
 const restAddress = ref('')
 
+// ── Campos del gerente ──
+/** Nombre completo del gerente (empleado admin). */
 const managerName = ref('')
+/** Email del gerente. */
 const managerEmail = ref('')
+/** Teléfono del gerente. */
 const managerPhone = ref('')
+/** Código numérico de empleado (máx. 5 dígitos). Usado para iniciar sesión. */
 const managerCode = ref('')
+/** Contraseña del gerente (mín. 8 caracteres). */
 const managerPassword = ref('')
 
+/** Mapa de errores de validación por campo. Vacío si no hay errores. */
 const errors = ref({})
-const step = ref('form') // 'form' | 'payment'
+
+/** Paso actual del modal: `'form'` (datos) o `'payment'` (pago con PayPal). */
+const step = ref('form')
+
+/**
+ * Payload con los datos del formulario, construido antes de pasar al paso de pago.
+ * Se emite junto al evento `submit` cuando PayPal aprueba el pago.
+ * @type {import('vue').Ref<object|null>}
+ */
 const pendingPayload = ref(null)
+
+/** Mensaje de error de PayPal, o `null` si no hay error. */
 const paypalError = ref(null)
 
+/**
+ * Restablece todos los campos, errores y el estado del modal a sus valores iniciales.
+ */
 function reset() {
   restPrefix.value = ''
   restName.value = ''
@@ -43,6 +80,10 @@ function reset() {
   paypalError.value = null
 }
 
+/**
+ * Valida los campos del formulario y actualiza `errors`.
+ * @returns {boolean} `true` si todos los campos son válidos.
+ */
 function validate() {
   const e = {}
   if (!restPrefix.value) e.restPrefix = 'Prefijo obligatorio'
@@ -60,11 +101,18 @@ function validate() {
   return Object.keys(e).length === 0
 }
 
+/**
+ * Emite el evento `close` y resetea el modal.
+ */
 function close() {
   emit('close')
   reset()
 }
 
+/**
+ * Valida el formulario y, si es correcto, construye `pendingPayload`
+ * y avanza al paso de pago.
+ */
 function goToPayment() {
   const isValid = validate()
   if (isValid) {
@@ -85,6 +133,12 @@ function goToPayment() {
   }
 }
 
+/**
+ * Carga el SDK de PayPal y renderiza el botón de pago en `#paypal-button-container`.
+ * Al aprobarse el pago emite `submit` con `pendingPayload` y cierra el modal.
+ * En caso de error muestra un mensaje en `paypalError`.
+ * @returns {Promise<void>}
+ */
 async function renderPayPalButton() {
   paypalError.value = null
   try {
@@ -117,10 +171,12 @@ async function renderPayPalButton() {
   }
 }
 
+/** Renderiza el botón PayPal en el siguiente tick al entrar en el paso de pago. */
 watch(step, (v) => {
   if (v === 'payment') nextTick(renderPayPalButton)
 })
 
+/** Resetea el modal cuando se cierra desde el exterior (`open` pasa a `false`). */
 watch(() => props.open, (v) => {
   if (!v) reset()
 })

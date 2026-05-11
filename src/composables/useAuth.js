@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { authService } from '@/services/authService.js'
 
 const user = ref(null)
+const token = ref(null)
 const loading = ref(false)
 const error = ref(null)
 
@@ -11,7 +12,9 @@ export function useAuth() {
     error.value = null
     let success = false
     try {
-      user.value = await authService.login(credentials)
+      const data = await authService.login(credentials)
+      token.value = data?.token ?? null
+      user.value = data
       success = true
     } catch (err) {
       error.value = err.message
@@ -23,11 +26,12 @@ export function useAuth() {
   }
 
   function logout() {
-    authService.logout()
     user.value = null
+    token.value = null
   }
 
   function setUser(data) {
+    token.value = data?.token ?? null
     user.value = data
   }
 
@@ -37,6 +41,7 @@ export function useAuth() {
 
   return {
     user,
+    token,
     loading,
     error,
     login,
