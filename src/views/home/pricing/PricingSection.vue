@@ -7,7 +7,7 @@ import { restaurantService } from '@/services/restaurantService.js'
 import { useAuth } from '@/composables/useAuth.js'
 
 const { t } = useI18n()
-const { setUser } = useAuth()
+const { setUser, user } = useAuth()
 
 /** Controla la visibilidad del modal de registro de restaurante. */
 const showRegister = ref(false)
@@ -54,7 +54,7 @@ async function handleRegisterSubmit(payload) {
     <div class="pricing__grid">
 
       <!-- Pro -->
-      <div class="plan-card plan-card--highlighted">
+      <div class="plan-card plan-card--highlighted" :class="{ 'plan-card--locked': user }">
         <div class="plan-card__top">
           <span class="plan-card__badge">{{ t('pricing.popular') }}</span>
           <h3 class="plan-card__name">{{ t('pricing.plans.0.name') }}</h3>
@@ -70,7 +70,11 @@ async function handleRegisterSubmit(payload) {
             {{ t(`pricing.plans.0.features.${j - 1}`) }}
           </li>
         </ul>
-        <BaseButton variant="primary" :label="t('pricing.plans.0.cta')" class="plan-card__cta"
+        <div v-if="user" class="plan-card__locked-banner">
+          <font-awesome-icon icon="lock" class="plan-card__lock-icon" />
+          <span>Ya tienes una cuenta activa</span>
+        </div>
+        <BaseButton v-else variant="primary" :label="t('pricing.plans.0.cta')" class="plan-card__cta"
           @click="showRegister = true" />
       </div>
 
@@ -171,6 +175,31 @@ async function handleRegisterSubmit(payload) {
 .plan-card--highlighted {
   border-color: var(--color-primary, #111);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.plan-card--locked {
+  opacity: 0.55;
+  pointer-events: none;
+  filter: grayscale(0.3);
+}
+
+.plan-card__locked-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  background: var(--color-bg-subtle, #f5f5f5);
+  border: 1px solid var(--color-border, #e0e0e0);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted, #666);
+}
+
+.plan-card__lock-icon {
+  font-size: 0.8rem;
+  color: var(--color-text-muted, #666);
 }
 
 .plan-card__top {

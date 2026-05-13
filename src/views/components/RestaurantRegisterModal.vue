@@ -323,14 +323,40 @@ watch(() => props.open, (v) => {
   gap: 0.5rem;
   margin-bottom: 0.75rem;
 }
-.register-header h3 { margin: 0; font-size: 1.05rem }
-.register-close { margin-left: auto; background: none; border: none; font-size: 1rem; cursor: pointer }
+.register-header h3 { margin: 0; font-size: 1.05rem; color: var(--color-text, #111) }
+.register-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--color-text, #111);
+  line-height: 1;
+}
 
 .register-form { display: flex; flex-direction: column; gap: 1rem }
 .register-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem }
-.register-section h4 { margin: 0 0 0.5rem 0 }
-.field { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.4rem }
-.field input, .field textarea { padding: 0.5rem; border: 1px solid var(--color-border, #e0e0e0); border-radius: 6px }
+.register-section h4 { margin: 0 0 0.5rem 0; color: var(--color-text, #111) }
+.field { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.4rem; color: var(--color-text, #111) }
+.field input,
+.field textarea {
+  padding: 0.5rem;
+  border: 1px solid var(--color-border, #e0e0e0);
+  border-radius: 6px;
+  background: var(--color-bg, #fff);
+  color: var(--color-text, #111);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--color-border-focus, #111);
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--color-text-muted, #999);
+}
 .field-error { color: #d93025; font-size: 0.85rem; margin: 0 }
 .field-hint { font-size: 0.8rem; color: var(--color-text-muted, #666); margin: 0 }
 
@@ -343,8 +369,39 @@ watch(() => props.open, (v) => {
 .step--done { color: var(--color-text-muted, #999) }
 .step-sep { color: var(--color-text-muted, #ccc) }
 
+.register-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+.btn-cancel {
+  background: none;
+  border: 1px solid var(--color-border, #e0e0e0);
+  color: var(--color-text, #111);
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-cancel:hover { opacity: 0.7; }
+.btn-primary {
+  background: var(--color-primary, #111);
+  color: var(--color-text-on-primary, #fff);
+  border: none;
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-primary:hover { opacity: 0.8; }
+
 .payment-step { display: flex; flex-direction: column; gap: 1rem; padding: 0.5rem 0 }
-.payment-summary { margin: 0; font-size: 0.95rem }
+.payment-summary { margin: 0; font-size: 0.95rem; color: var(--color-text, #111) }
 .paypal-container { min-height: 48px }
 .payment-error { margin-top: 0.25rem }
 
