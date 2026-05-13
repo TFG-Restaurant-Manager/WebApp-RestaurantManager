@@ -105,7 +105,7 @@ async function handleRegisterSubmit(payload) {
     ✓ Restaurante creado correctamente. Ya puedes iniciar sesión.
   </div>
   <div v-if="registerError" class="register-feedback register-feedback--err">
-    Error al crear el restaurante: {{ registerError }}</div>
+    Error al crear el restaurante</div>
 </template>
 
 <style scoped>
@@ -327,5 +327,21 @@ async function handleRegisterSubmit(payload) {
 .register-feedback--err {
   background: #fee2e2;
   color: #991b1b
+}
+@media (max-width: 900px) {
+  .pricing {
+    padding: 4rem 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .pricing {
+    padding: 3rem 1rem;
+  }
+
+  .plan-card {
+    min-width: 100%;
+    max-width: 100%;
+  }
 }
 </style>

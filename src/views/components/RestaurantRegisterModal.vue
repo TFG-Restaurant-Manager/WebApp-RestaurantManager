@@ -388,8 +388,8 @@ watch(() => props.open, (v) => {
 }
 .btn-cancel:hover { opacity: 0.7; }
 .btn-primary {
-  background: var(--color-primary, #111);
-  color: var(--color-text-on-primary, #fff);
+  background: #111;
+  color: #fff;
   border: none;
   padding: 0.55rem 0.9rem;
   border-radius: 8px;
@@ -397,6 +397,10 @@ watch(() => props.open, (v) => {
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.15s;
+}
+[data-theme="dark"] .btn-primary {
+  background: #f0f0f0;
+  color: #111;
 }
 .btn-primary:hover { opacity: 0.8; }
 
@@ -407,10 +411,31 @@ watch(() => props.open, (v) => {
 
 .register-actions { display: flex; justify-content: flex-end; gap: 0.5rem }
 .btn-cancel { padding: 0.5rem 0.8rem; border-radius: 6px; border: 1px solid var(--color-border, #e0e0e0); background: none }
-.btn-primary { padding: 0.55rem 0.9rem; border-radius: 6px; border: none; background: var(--color-primary, #111); color: #fff }
 
 @media (max-width: 900px) {
   .register-modal { width: 95vw }
   .register-grid { grid-template-columns: 1fr }
+}
+@media (max-width: 640px) {
+  .register-modal {
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 1rem;
+  }
+
+  .register-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .register-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-cancel,
+  .btn-primary {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
 }
 </style>

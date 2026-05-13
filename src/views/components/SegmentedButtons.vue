@@ -117,7 +117,7 @@ function onAnimationEnd(event) {
         <button v-for="(option, index) in normalizedOptions" :key="option.label ?? index"
             :class="['seg-btn', { 'is-active': isActive(option) }]" type="button" :aria-pressed="isActive(option)"
             role="tab"
-            :style="{ width: widthFor(option), minWidth: minWidthFor(option), '--seg-scale': (1 / props.expandRatio) }"
+            :style="{ width: 'fit-content', minWidth: minWidthFor(option), '--seg-scale': (1 / props.expandRatio) }"
             @click="(e) => { select(option); handlePress(e) }" @animationend="onAnimationEnd">
             {{ option.label }}
         </button>
@@ -127,7 +127,7 @@ function onAnimationEnd(event) {
 <style scoped>
 .segmented-buttons {
     display: flex;
-    width: 100%;
+    width: fit-content;
     border-radius: 10px;
     overflow: visible;
     align-items: center;

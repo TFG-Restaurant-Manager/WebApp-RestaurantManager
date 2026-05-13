@@ -51,7 +51,7 @@ async function submit() {
       </div>
 
       <p v-if="error" class="auth-card__error">
-        {{ error }}
+        {{ `Error al iniciar sesion` }}
       </p>
 
       <button type="submit" class="auth-card__submit" :disabled="loading">
