@@ -94,7 +94,7 @@ export default {
     fieldName: 'Name',
     fieldNamePlaceholder: 'Your name',
     fieldCode: 'Employee code',
-    fieldCodePlaceholder: 'e.g. REST001',
+    fieldCodePlaceholder: 'e.g. 001',
     fieldEmail: 'Email',
     fieldEmailPlaceholder: "you{'@'}email.com",
     fieldPassword: 'Password',

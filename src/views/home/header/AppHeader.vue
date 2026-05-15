@@ -69,6 +69,14 @@ const showAuthCard = ref(false)
 /** Controla la visibilidad del menú desplegable del usuario autenticado. */
 const showUserMenu = ref(false)
 
+/** Controla la visibilidad del menú de navegación en móvil (hamburguesa). */
+const showMobileMenu = ref(false)
+
+/** Cierra el menú móvil al volver a tamaño desktop. */
+function handleResize() {
+  if (window.innerWidth > 768) showMobileMenu.value = false
+}
+
 /** Controla la visibilidad del diálogo de confirmación de baja. */
 const showConfirm = ref(false)
 
@@ -139,9 +147,13 @@ function updateActive() {
   }
 }
 
-onMounted(() => window.addEventListener('scroll', updateActive, { passive: true }))
+onMounted(() => {
+  window.addEventListener('scroll', updateActive, { passive: true })
+  window.addEventListener('resize', handleResize)
+})
 onUnmounted(() => {
   window.removeEventListener('scroll', updateActive)
+  window.removeEventListener('resize', handleResize)
   clearTimeout(scrollEndTimer)
 })
 
@@ -171,19 +183,20 @@ function onNavChange(label) {
   <header class="app-header">
     <!-- Logo (izquierda) -->
     <div class="app-header__logo">
-      <!-- Sustituir por <img> cuando esté disponible el logo -->
       <span class="app-header__logo-text">Restaurant<strong>Manager</strong></span>
     </div>
 
-    <!-- Navegación + toggle de tema (derecha) -->
-    <div class="app-header__right">
-      <nav class="app-header__nav">
-        <SegmentedButtons v-model="activeLabel" :options="NAV_OPTIONS" @change="onNavChange" />
-      </nav>
+    <!-- Navegación desktop (centro) -->
+    <nav class="app-header__nav">
+      <SegmentedButtons v-model="activeLabel" :options="NAV_OPTIONS" @change="onNavChange" />
+    </nav>
+
+    <!-- Controles derecha: toggles + auth + hamburguesa -->
+    <div class="app-header__controls">
       <ThemeToggle />
       <LangToggle />
 
-      <!-- Login button + dropdown card -->
+      <!-- Auth -->
       <div class="app-header__auth-wrap">
         <template v-if="user">
           <button class="app-header__user-btn" @click="toggleUserMenu" :aria-expanded="showUserMenu"
@@ -192,8 +205,7 @@ function onNavChange(label) {
           </button>
           <Transition name="auth-drop">
             <div v-if="showUserMenu" class="app-header__user-menu">
-              <button class="user-menu__item user-menu__item--danger" @click="handleUnsubscribe">{{ t('nav.unsubscribe')
-                }}</button>
+              <button class="user-menu__item user-menu__item--danger" @click="handleUnsubscribe">{{ t('nav.unsubscribe') }}</button>
               <button class="user-menu__item" @click="handleLogout">{{ t('nav.logout') }}</button>
             </div>
           </Transition>
@@ -205,7 +217,30 @@ function onNavChange(label) {
           </Transition>
         </template>
       </div>
+
+      <!-- Hamburguesa (solo móvil) -->
+      <button class="app-header__hamburger" @click="showMobileMenu = !showMobileMenu"
+        :aria-expanded="showMobileMenu" aria-label="Abrir menú">
+        <span class="hamburger-bar" />
+        <span class="hamburger-bar" />
+        <span class="hamburger-bar" :class="{ 'hamburger-bar--hide': showMobileMenu }" />
+      </button>
     </div>
+
+    <!-- Menú móvil desplegable -->
+    <Transition name="mobile-nav">
+      <nav v-if="showMobileMenu" class="app-header__mobile-nav" @click.self="showMobileMenu = false">
+        <button
+          v-for="opt in NAV_OPTIONS"
+          :key="opt.value"
+          class="mobile-nav__item"
+          :class="{ 'mobile-nav__item--active': activeValue === opt.value }"
+          @click="onNavChange(opt.label); showMobileMenu = false"
+        >
+          {{ opt.label }}
+        </button>
+      </nav>
+    </Transition>
 
     <Transition name="fade">
       <div v-if="showAuthCard || showUserMenu" class="auth-backdrop" @click="showAuthCard = false; closeUserMenu()" />
@@ -247,11 +282,12 @@ function onNavChange(label) {
   z-index: 100;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 0 2rem;
   min-height: 60px;
+  gap: 1rem;
   background: var(--color-bg, #fff);
   border-bottom: 1px solid var(--color-border, #e0e0e0);
+  flex-wrap: wrap;
 }
 
 /* ── Logo ── */
@@ -271,16 +307,23 @@ function onNavChange(label) {
   font-weight: 800;
 }
 
-/* ── Nav + toggle ── */
-.app-header__right {
+/* ── Nav desktop (centro) ── */
+.app-header__nav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  min-width: 0;
+  width: fit-content;
+}
+
+/* ── Controles derecha ── */
+.app-header__controls {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.app-header__nav {
-  display: flex;
-  align-items: center;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 /* ── Auth wrap + dropdown ── */
@@ -352,6 +395,74 @@ function onNavChange(label) {
 
 .user-menu__item--danger {
   color: #d93025;
+}
+
+/* ── Hamburguesa (oculto en desktop) ── */
+.app-header__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.app-header__hamburger:hover {
+  background: var(--color-bg-subtle, #f5f5f5);
+}
+
+.hamburger-bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--color-text, #111);
+  border-radius: 2px;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.hamburger-bar--hide {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+/* ── Menú móvil ── */
+.app-header__mobile-nav {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--color-border, #e0e0e0);
+  padding: 0.5rem 0 0.75rem;
+  background: var(--color-bg, #fff);
+}
+
+.mobile-nav__item {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-muted, #666);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.12s, color 0.12s;
+}
+
+.mobile-nav__item:hover {
+  background: var(--color-bg-subtle, #f5f5f5);
+  color: var(--color-text, #111);
+}
+
+.mobile-nav__item--active {
+  color: var(--color-text, #111);
+  background: var(--color-bg-subtle, #f5f5f5);
 }
 
 /* ── Backdrop ── */
@@ -446,6 +557,18 @@ function onNavChange(label) {
   opacity: 0;
 }
 
+.mobile-nav-enter-active,
+.mobile-nav-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s cubic-bezier(.2, .8, .2, 1);
+  overflow: hidden;
+}
+
+.mobile-nav-enter-from,
+.mobile-nav-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
 /* ── Unsubscribe toasts ── */
 .unsubscribe-toast {
   position: fixed;
@@ -472,57 +595,18 @@ function onNavChange(label) {
 }
 
 /* ── Responsive ── */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .app-header {
-    flex-direction: row;
-    flex-wrap: wrap;
-    height: auto;
-    padding: 0.5rem 0.75rem 0.6rem;
-    row-gap: 0.55rem;
-    column-gap: 0.35rem;
-    align-items: center;
-  }
-
-
-  .app-header__logo {
-    flex: 1;
-  }
-
-
-  .app-header__right {
-    flex-direction: row-reverse;
-    align-items: center;
-    gap: 0.35rem;
-    flex-wrap: wrap;
-    flex: 0;
+    padding: 0 1rem;
+    gap: 0.5rem;
   }
 
   .app-header__nav {
-    order: 99;
-    flex-basis: 100%;
-    width: 100%;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-top: 0.5rem;
-    z-index: 100;
-  }
-
-  .app-header__nav::-webkit-scrollbar {
     display: none;
   }
 
-  :deep(.segmented-buttons) {
-    width: 100%;
-  }
-
-  :deep(.seg-btn) {
-    padding: 0.3rem 0.5rem;
-    font-size: 0.75rem;
-    white-space: nowrap;
-  }
-
-  .app-header__user-menu {
-    right: 0;
+  .app-header__hamburger {
+    display: flex;
   }
 }
 </style>
