@@ -20,7 +20,7 @@ import {
 library.add(
   faUtensils,
   faClipboardList,
-  faPaintbrush,
+  faPaintbrush, 
   faClock,
   faChartBar,
   faUserShield,
